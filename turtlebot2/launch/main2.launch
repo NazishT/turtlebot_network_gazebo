@@ -1,0 +1,19 @@
+
+
+<launch>
+  
+   <param name="/use_sim_time" value="true" />
+
+   <node name="gazebo" pkg="gazebo_ros" type="gazebo" 
+    args="$(find turtlebot_gazebo)/worlds/playground.world" respawn="false" output="screen"/>
+             
+   <include file="$(find turtlebot_network_gazebo)/launch/one_robot2.launch" />
+   <include file="$(find turtlebot_teleop)/launch/xbox360_teleop.launch" />
+   <node pkg="joy" type="joy_node" name="joystick1" output="screen">
+   <param name="dev" type="string" value="/dev/input/js0"/>
+   <param name="deadzone" value="0.12"/>
+   </node>
+   
+ 
+
+</launch>
