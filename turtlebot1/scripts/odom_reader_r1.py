@@ -30,5 +30,6 @@ if __name__=='__main__':
         rospy.init_node('odom_reader_r1', anonymous=True)
 	sub=rospy.Subscriber('robot2/odom', Odometry, odom_callback)
         pub=rospy.Publisher('robot1/cmd_vel/input/switch', Twist, queue_size=5)
+        #pub=rospy.Publisher('robot1/mobile_base/commands/velocity', Twist, queue_size=5)
         while not rospy.is_shutdown():
            rospy.spin()
