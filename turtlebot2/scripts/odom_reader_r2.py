@@ -12,8 +12,8 @@ def odom_callback(msg):
 
     global v_x, w
 
-    v_x=msg.twist.twist.linear.x
-    w = msg.twist.twist.angular.z
+    v_x=msg.linear.x
+    w = msg.angular.z
 
     vel_msg.linear.x = v_x
     vel_msg.angular.z = w
@@ -26,7 +26,8 @@ def odom_callback(msg):
 
 if __name__=='__main__':
      rospy.init_node('odom_reader_r2', anonymous=True)     
-     sub = rospy.Subscriber('robot1/odom', Odometry, odom_callback) 
-     pub = rospy.Publisher('robot2/mobile_base/commands/velocity', Twist, queue_size=5)
+     sub = rospy.Subscriber('robot1/mobile_base/commands/velocity', Twist, odom_callback) 
+     pub = rospy.Publisher('robot2/mobile_base/commands/velocity', Twist, queue_size=100)
+     #pub = rospy.Publisher('robot2/cmd_vel/input/switch', Twist, queue_size=5)
      while not rospy.is_shutdown():
      	rospy.spin()
