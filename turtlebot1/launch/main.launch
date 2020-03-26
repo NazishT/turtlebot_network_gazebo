@@ -1,19 +1,15 @@
-<launch>
-    <arg name="robot_name"/>
-    <arg name="init_pose"/>
- 
- <group ns="robot1">
-    <param name="robot_description" command=
-    "$(find xacro)/xacro.py $(find turtlebot_description)/robots/kobuki_hexagons_asus_xtion_pro.urdf.xacro" />
-    <param name="tf_prefix" value="robot1_tf" />
- 
-    <node name="spawn_turtlebot_model" pkg="gazebo_ros" type="spawn_model"
-     args="$(arg init_pose) -urdf -param robot_description -model $(arg robot_name)" respawn="false" output="screen" />
 
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="30.0" />
-    </node>
-   
-    
-  </group>
+<launch>
+  
+   <param name="/use_sim_time" value="true" />
+
+   <!--node name="gazebo" pkg="gazebo_ros" type="gazebo" 
+    args="$(find turtlebot_gazebo)/worlds/playground.world" respawn="false" output="screen"/-->
+             
+   <include file="$(find turtlebot_network_gazebo)/launch/one_robot.launch">
+     <arg name="init_pose" value="-x 4 -y 1 -z 0" />
+     <arg name="robot_name"  value="robot1" />
+   </include>
+ 
+
 </launch>
