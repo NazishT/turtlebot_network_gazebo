@@ -1,0 +1,7 @@
+<launch>
+ <group ns="robot1">
+    <node pkg="turtlebot_network_gazebo" name="drawasquare" type="move_in_square.py" output="screen"> 
+    </node>
+
+ </group>
+</launch>
