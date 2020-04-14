@@ -7,15 +7,16 @@ from geometry_msgs.msg import Twist
 def callback(msg):
         move = Twist()
 
-	print msg.ranges[360]
-	if msg.ranges[360]<1:
-	   move.linear.x=-1
-	   move.angular.z=-1
+	#print min(msg.ranges)
+	if min(msg.ranges)>0.1 and min(msg.ranges)<0.2:
+	   print min(msg.ranges)
+	   move.linear.x=0.2
+	   
 	pub.publish(move)
 
 
 rospy.init_node('force_feedback')
 sub=rospy.Subscriber('/scan', LaserScan, callback)
-pub= rospy.Publisher('/robot1/mobile_base/commands/velocity',Twist, queue_size=5)
+pub = rospy.Publisher('/robot2/cmd_vel_mux/input/safety', Twist, queue_size=10)
 
 rospy.spin()
