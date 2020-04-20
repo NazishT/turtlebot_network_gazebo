@@ -6,10 +6,9 @@
     args="$(find turtlebot_gazebo)/worlds/playground.world" respawn="false" output="screen"/-->
              
    <include file="$(find turtlebot_network_gazebo)/launch/one_robot1.launch">
-     <arg name="init_pose" value="-x 4 -y 1 -z 0" />
+     <arg name="init_pose" value="-x 1 -y -3 -z 0" />
      <arg name="robot_name"  value="robot1" />
    </include>
-   
-   
+ 
 
 </launch>
