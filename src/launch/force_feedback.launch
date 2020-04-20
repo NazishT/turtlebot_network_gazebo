@@ -1,0 +1,8 @@
+<launch>
+ <group ns="robot2">
+    <node pkg="turtlebot_network_gazebo" name="force_feedback" type="forcefeedback.py" output="screen"> 
+      <remap from="cmd_vel_mux/output/cmd_vel" to="mobile_base/commands/velocity" />
+    </node>
+
+ </group>
+</launch>
