@@ -1,0 +1,47 @@
+
+<launch>
+    <arg name="robot_name"/>
+    <arg name="init_pose"/>
+ 
+ <group ns="robot2">
+    <param name="robot_description" command=
+    "$(find xacro)/xacro.py $(find turtlebot_description)/robots/kobuki_hexagons_asus_xtion_pro.urdf.xacro" />
+    <param name="tf_prefix" value="robot2" />
+
+ <!-- Spawn a TB in gazebo -->
+    <node name="spawn_turtlebot_model" pkg="gazebo_ros" type="spawn_model"
+     args="$(arg init_pose) -urdf -param robot_description -model $(arg robot_name)" respawn="false" output="screen"/>
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="10.0" />
+    </node>
+
+   <!-- Fake laser -->
+    <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
+         args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager">
+     <param name="publish_frequency" type="double" value="10"/>
+     <param name="scan_height" value="10"/>
+     <param name="range_min" value="0.45"/>
+     <param name="output_frame_id" value="/$(arg robot_name)/camera_depth_frame"/>
+     <remap from="image" to="/$(arg robot_name)/camera/depth/image_raw"/>
+     <remap from="scan" to="/$(arg robot_name)/scan"/>
+    </node>
+
+
+  <!-- Velocity Multiplexer -->
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet nodelet_manager">
+    <param name="yaml_cfg_file" value="$(find turtlebot_network_gazebo)/config/cmd_vel_mux.yaml"/>
+    <remap from="cmd_vel_mux/output/cmd_vel" to="mobile_base/commands/velocity" />
+    </node>
+
+
+
+  <!-- Odometry Reader -->
+    <node pkg="turtlebot_network_gazebo" name="odom_reader_r2" type="odom_reader_r2.py" output="screen"> 
+    </node>
+
+   <!-- joystick -->
+   <include file="$(find turtlebot_teleop)/launch/xbox360_teleop.launch"/>
+  </group>
+</launch>
